@@ -1,12 +1,13 @@
 import FilaDesembarque from './FilaDesembarque'
 
 
-function ListaDesembarque({ desembarques }){
+function ListaDesembarque({ desembarques, prioritarios, onTogglePrioridad }) {
     return (
       <div className="tabla-contenedor">
         <table className="tabla-desembarques">
           <thead>
             <tr>
+              <th>Prioritario</th>
               <th>Id</th>
               <th>Especie</th>
               <th>Embarcacion</th>
@@ -21,6 +22,8 @@ function ListaDesembarque({ desembarques }){
               <FilaDesembarque
                 key={item.id}
                 desembarque={item}
+                esPrioritario={prioritarios.includes(item.id)}
+                onTogglePrioridad={onTogglePrioridad}
               />
             ))}
           </tbody>

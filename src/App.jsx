@@ -1,5 +1,5 @@
 import './App.css'
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from 'react';
 import ListaDesembarque from './components/ListaDesembarque';
 
 function App() {
@@ -8,12 +8,28 @@ function App() {
   const [error, setError] = useState(null);
   const [filtro, setFiltro] = useState('');
 
+  // R4: Estado inicial para los prioritarios leyendo de Local Storage
+  const [prioritarios, setPrioritarios] = useState(() => {
+    try {
+      const guardados = localStorage.getItem('lotes_prioritarios');
+      return guardados ? JSON.parse(guardados) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
   useEffect(() => {
     cargarDatos();
   }, []);
 
+  // R4: Guardar automáticamente en Local Storage cuando cambien los prioritarios
+  useEffect(() => {
+    localStorage.setItem('lotes_prioritarios', JSON.stringify(prioritarios));
+  }, [prioritarios]);
+
   async function cargarDatos() {
     try {
+      // R6: Uso de la variable de entorno
       const response = await fetch(import.meta.env.VITE_API_URL);
 
       if (!response.ok) {
@@ -21,7 +37,6 @@ function App() {
       }
 
       const data = await response.json();
-
       setDesembarques(data);
     } catch (error) {
       setError(error.message);
@@ -30,22 +45,31 @@ function App() {
     }
   }
 
+  // R4: Función para activar/desactivar la prioridad de un lote
+  // ¡Aquí cerramos correctamente la llave que faltaba!
+  function togglePrioridad(id) {
+    setPrioritarios((prevPrioritarios) => {
+      if (prevPrioritarios.includes(id)) {
+        return prevPrioritarios.filter((itemId) => itemId !== id);
+      } else {
+        return [...prevPrioritarios, id];
+      }
+    });
+  }
+
   if (loading) return <p>Cargando...</p>;
 
   if (error) return <p>Error: {error}</p>;
 
+  // R5 & R6: Saneamiento y filtrado seguro por especie o estado
   const desembarquesFiltrados = desembarques.filter((item) => {
-    // Eliminamos caracteres especiales sospechosos para evitar inyecciones de código básicas
     const filtroSaneado = filtro.replace(/[<>%/&'"]/g, "").toLowerCase().trim();
 
-    // Si el usuario no ha escrito nada, mostramos todo
     if (!filtroSaneado) return true;
     
-    // Obtenemos los campos solicitados
     const especie = String(item.especie || '').toLowerCase();
     const estado = String(item.estado || '').toLowerCase();
 
-    // Filtramos estrictamente por especie o por estado
     return especie.includes(filtroSaneado) || estado.includes(filtroSaneado);
   });
 
@@ -60,10 +84,14 @@ function App() {
         onChange={(e) => setFiltro(e.target.value)}
       />
 
-      <ListaDesembarque desembarques={desembarquesFiltrados} />
+      {/* R4: Le pasamos los datos de prioridad y la función al componente hijo */}
+      <ListaDesembarque 
+        desembarques={desembarquesFiltrados} 
+        prioritarios={prioritarios}
+        onTogglePrioridad={togglePrioridad}
+      />
     </>
   );
 }
 
-
-export default App
+export default App;
