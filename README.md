@@ -36,15 +36,12 @@ Si bien la sugerencia inicial de la IA era funcional, decidí modificarla para c
 
 ## 3. Análisis de Código Estático y Buenas Prácticas (Requerimiento R7)
 
-El proyecto fue analizado utilizando herramientas de revisión de calidad de código (SonarLint). A continuación se detallan los hallazgos y su resolución:
+El proyecto fue analizado utilizando la herramienta SonarQube para IDE en VS Code. A continuación se detallan los dos hallazgos identificados y las acciones tomadas:
 
-### Hallazgo 1 (Code Smell - Práctica Obsoleta)
-* Reporte de SonarLint: "Remove this obsolete 'border' attribute." (Detectado en la etiqueta table de ListaDesembarque.jsx).
-* Corrección / Justificación: Se aceptó la recomendación. El atributo HTML border={1} está deprecado en los estándares modernos de desarrollo web. Se eliminó del JSX y la responsabilidad visual de la estructura se delegó completamente al archivo CSS global, logrando una correcta separación entre estructura y diseño.
+### Hallazgo 1 (Maintainability / Intentionality Issue - Regla javascript:S2486)
+* Reporte de SonarQube: "Handle this exception or don't catch it at all. Exceptions should not be ignored." (Detectado en App.jsx, línea 16).
+* Corrección / Justificación: Se aceptó la recomendación. El bloque catch encargado de manejar posibles fallas al leer del Local Storage se encontraba vacío, lo que silenciaba los errores en tiempo de ejecución. Se corrigió agregando un console.error(e) para registrar la excepción de manera adecuada en la consola del desarrollador antes de retornar el arreglo vacío de respaldo, mejorando la robustez del código.
 
-### Hallazgo 2 (Vulnerabilidad - Hardcoded Credentials / URLs)
-* Reporte de SonarLint: "Make sure using this hardcoded URL is safe here / Extract this URL to a configuration file." (Detectado al intentar consumir la ruta del backend mediante texto plano).
-* Corrección / Justificación: Se corrigió inmediatamente. Escribir la URL directamente en el código es una mala práctica de seguridad y dificulta el despliegue. Se reemplazó el string estático por la variable de entorno import.meta.env.VITE_API_URL, leyendo la configuración de manera segura desde el entorno de Vite.
-
----
-Desarrollado para Inacap - San Pedro de la Paz, Otoño 2026
+### Hallazgo 2 (Maintainability Issue - Regla javascript:S6774)
+* Reporte de SonarQube: "'desembarques' is missing in props validation. React components should validate prop types" (Detectado en ListaDesembarque.jsx, línea 4).
+* Corrección / Justificación: Se justifica su omisión. SonarQube sugiere utilizar la librería externa prop-types para validar estrictamente los tipos de datos que reciben los componentes por props. Dado que este proyecto es una SPA controlada, desarrollada en JavaScript puro, y la estructura de los datos que retorna la API interna es conocida y predecible, se decidió no instalar esta dependencia extra para mantener el proyecto liviano y enfocado en los requerimientos principales de la pauta.

@@ -14,6 +14,7 @@ function App() {
       const guardados = localStorage.getItem('lotes_prioritarios');
       return guardados ? JSON.parse(guardados) : [];
     } catch (e) {
+      console.error('Error al leer Local Storage', e);
       return [];
     }
   });
