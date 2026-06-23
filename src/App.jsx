@@ -47,7 +47,6 @@ function App() {
   }
 
   // R4: Función para activar/desactivar la prioridad de un lote
-  // ¡Aquí cerramos correctamente la llave que faltaba!
   function togglePrioridad(id) {
     setPrioritarios((prevPrioritarios) => {
       if (prevPrioritarios.includes(id)) {
