@@ -1,0 +1,188 @@
+/* Variables de diseño */
+:root {
+  /* Fondos y Textos Generales */
+  --bg-principal: #f4f7f9;
+  --bg-tarjeta: #ffffff;
+  --texto-principal: #2c3e50;
+  --texto-secundario: #7f8c8d;
+  
+  /* Colores de Identidad (Azules Institucionales) */
+  --color-primario: #1a5276;       /* Azul marino */
+  --color-primario-hover: #2980b9; /* Azul más claro */
+  --color-borde: #e2e8f0;          /* Gris suave para líneas */
+  
+  /* Colores de Estado semánticos */
+  --estado-exito: #27ae60;         /* Verde (Aprobado/Completado) */
+  --estado-pendiente: #f39c12;     /* Naranja (Pendiente/En revisión) */
+  --estado-error: #c0392b;         /* Rojo (Rechazado/Cancelado) */
+
+  /* Tipografía y Estructura */
+  --fuente-sistema: 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+  --sombra-suave: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --radio-borde: 10px;
+}
+
+/* Reset y Estilos Base */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--fuente-sistema);
+  background-color: var(--bg-principal);
+  color: var(--texto-principal);
+  line-height: 1.5;
+  padding: 2rem 1.5rem;
+}
+
+/* Contenedor principal de React (#root) */
+#root {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* TIPOGRAFÍAS Y ENCABEZADOS */
+
+h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--color-primario);
+  margin-bottom: 1.8rem;
+  position: relative;
+  padding-bottom: 0.6rem;
+}
+
+h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 4px;
+  background-color: var(--color-primario-hover);
+  border-radius: 2px;
+}
+
+p {
+  color: var(--texto-secundario);
+  font-size: 1.1rem;
+}
+
+/* ELEMENTOS DE FORMULARIO*/
+
+input[type="text"] {
+  width: 100%;
+  max-width: 420px;
+  padding: 0.8rem 1.2rem;
+  font-size: 0.95rem;
+  font-family: inherit;
+  border: 2px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  background-color: var(--bg-tarjeta);
+  color: var(--texto-principal);
+  margin-bottom: 2rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 4px rgba(26, 82, 118, 0.12);
+}
+
+input[type="text"]::placeholder {
+  color: var(--texto-secundario);
+  opacity: 0.7;
+}
+
+/* CONTENEDOR Y TABLA DE DESEMBARQUES */
+
+.tabla-contenedor {
+  width: 100%;
+  overflow-x: auto;
+  background-color: var(--bg-tarjeta);
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-suave);
+  border: 1px solid var(--color-borde);
+}
+
+.tabla-desembarques {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.tabla-desembarques thead {
+  background-color: var(--color-primario);
+  color: #ffffff;
+}
+
+.tabla-desembarques th {
+  padding: 1rem 1.2rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.8px;
+}
+
+.tabla-desembarques td {
+  padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--color-borde);
+  color: var(--texto-principal);
+  vertical-align: middle;
+}
+
+/* Efecto Hover al pasar el mouse por encima de una fila */
+.tabla-desembarques tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.tabla-desembarques tbody tr:hover {
+  background-color: #f8fafc; 
+}
+
+.tabla-desembarques tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-desembarques td:nth-child(5) {
+  font-weight: 600;
+}
+
+/* ETIQUETAS DE ESTADO (Badges Dinámicos)*/
+
+.badge-estado {
+  padding: 0.3rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.estado-aprobado, .estado-completado, .estado-ok {
+  background-color: rgba(39, 174, 96, 0.12);
+  color: var(--estado-exito);
+}
+
+.estado-pendiente, .estado-revision, .estado-en-curso {
+  background-color: rgba(243, 156, 18, 0.12);
+  color: var(--estado-pendiente);
+}
+
+.estado-rechazado, .estado-cancelado, .estado-error {
+  background-color: rgba(192, 57, 43, 0.12);
+  color: var(--estado-error);
+}
+
+.badge-estado:not([class*="estado-"]) {
+  background-color: #f1f5f9;
+  color: var(--texto-secundario);
+}
